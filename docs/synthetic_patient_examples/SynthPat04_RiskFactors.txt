@@ -1,0 +1,17 @@
+Patient SynthPat04: Predicted as Low-Risk of Infection or CLL Treatment in the next 2-years
+Note: CLL-TIM predicts this with Low-Confidence
+
+
+Personalized High-Risk Factors for Patient: SynthPat04
+1: Mean No. of Days Between Infections (7yr) with a value of 664.0
+2: Hemoglobin - Value Min (7yr) with a value of 0.8440160000000001
+3: Platelets  - Value LinearFit_coefb (1yr)=Unknown
+4: Mininum No. of Days Between Infections (7yr) with a value of 664.0
+5: Leukocytes - Value Max (1yr) with a value of 7.4
+
+Personalized Low-Risk Factors for Patient: SynthPat04
+1: Leukocytes - Date Last (7yr) with a value of 131.0
+2: Absolute Erythrocyte Count - Date Mean (1yr) with a value of 131.0
+3: Leukocytes - Value Max (3m)=Unknown
+4: IGHV mutated or Unknown
+5: Binet Stage A

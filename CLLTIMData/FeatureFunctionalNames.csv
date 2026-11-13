@@ -1,0 +1,228 @@
+Age	Age=Unknown	1	B
+Female	Male or Unknown	1	B
+del(13q)=Unknown	del(13q)=Test Taken	1	B
+del(11q)=Negative	del(11q)=Positive or Unknown	1	B
+No. of Rare Patholgies (3m)	No. of Rare Patholgies (3m)=Unknown	1	
+No. of Rare Patholgies (1yr)	No. of Rare Patholgies (1yr)=Unknown	1	
+No. of Rare Patholgies (7yr)	No. of Rare Patholgies (7yr)=Unknown	1	
+del(11q)=Positive	del(11q)=Negative or Unknown	0	B
+Albumine - Value Mean (3m)	Albumine - Value Mean (3m)=Unknown	0	
+Albumine - Value Mean (1yr)	Albumine - Value Mean (1yr)=Unknown	0	
+Albumine - Value Min (3m)	Albumine - Value Min (3m)=Unknown	0	
+Albumine - Value Min (1yr)	Albumine - Value Min (1yr)=Unknown	0	
+del(11q)=Unknown	del(11q)=Test Taken	1	B
+Alkaline Phosphatese - Value Min (7yr)	Alkaline Phosphatese - Value Min (7yr)	0	
+tri(13q)=Negative	tri(13q)=Positive or Unknown	1	B
+tri(13q)=Positve	tri(13q)=Negative or Unknown	1	B
+Beta-2 Microglobulin- Value Mean (3m)	Beta-2 Microglobulin- Value Mean (3m)=Unknown	0	
+Beta-2 Microglobulin- Value Mean (1yr)	Beta-2 Microglobulin- Value Mean (1yr)=Unknown	0	
+Basophilocytes - Value Median (1yr)	Basophilocytes - Value Median (1yr)=Unknown	0	
+Basophilocytes - Date Mean (3m)	Basophilocytes - Date Mean (3m)=Unknown	0	
+Basophilocytes - Date Last (3m)	Basophilocytes - Date Last (3m)=Unknown	0	
+Basophilocytes - Date Last (1yr)	Basophilocytes - Date Last (1yr)=Unknown	0	
+del(17p)=Negative	del(17p)=Positive or Unknown	1	B
+del(17p)=Positive	del(17p)=Negative or Unknown	1	B
+Creatinine - Date Mean (7yr)	Creatinine - Date Mean (7yr)=Unknown	0	
+C-reactive Protein  - Value Mean (3m)	C-reactive Protein  - Value Mean (3m)=Unknown	0	
+C-Reactive Protein - Value Max (3m)	C-Reactive Protein - Value Max (3m)=Unknown	0	
+C-Reactive Protein - Value Kurtosis (1yr)	C-Reactive Protein - Value Kurtosis (1yr)=Unknown	0	
+C-Reactive Protein - Value LinearFit_coefb (7yr)	C-Reactive Protein - Value LinearFit_coefb (7yr)=Unknown	0	
+C-Reactive Protein - Date Mean (3m)	C-Reactive Protein - Date Mean (3m)=Unknown	0	
+del(17p)=Unknown	del(17p)=Not Unknown	1	B
+No Familial CLL	No Familial or Unknown	1	B
+Beta-2 Microglobulin < 4 mg/L	Beta-2 Microglobulin > 4 mg/L or Unknown	1	B
+EGFR - Number of Tests Taken (1yr)	EGFR - Number of Tests Taken (1yr)	0	
+Eosinophilocytes  - Date Mean (3m)	Eosinophilocytes  - Date Mean (3m)	0	
+Eosinophilocytes - Date Last (1yr)	Eosinophilocytes - Date Last (1yr)	0	
+Eosinophilocytes - Date Last (7yr)	Eosinophilocytes - Date Last (7yr)	0	
+Glucose - Value Mean (7yr)	Glucose - Value Mean (7yr)	0	
+Glucose  - Value Max (1yr)	Glucose  - Value Max (1yr)	0	
+beta-2-microglobulin > 4 mg/L	Beta-2 Microglobulin < 4 mg/L or Unknown	1	B
+Hemoglobin - Value Mean (3m)	Hemoglobin - Value Mean (3m)	0	
+Hemoglobin - Value Mean (1yr)	Hemoglobin - Value Mean (1yr)=Unknown	0	
+Hemoglobin - Value Mean (7yr)	Hemoglobin - Value Mean (7yr)=Unknown	0	
+Hemoglobin - Value SD (3m)	Hemoglobin - Value SD (3m)=Unknown	0	
+Hemoglobin - Value SD (1yr)	Hemoglobin - Value SD (1yr)=Unknown	0	
+Hemoglobin - Value SD (7yr)	Hemoglobin - Value SD (7yr)=Unknown	0	
+Hemoglobin - Value Min (3m)	Hemoglobin - Value Min (3m)=Unknown	0	
+Hemoglobin - Value Min (1yr)	Hemoglobin - Value Min (1yr)=Unknown	0	
+Hemoglobin - Value Min (7yr)	Hemoglobin - Value Min (7yr)=Unknown	0	
+Hemoglobin - Date Last (3m)	Hemoglobin - Date Last (3m)=Unknown	0	
+Hemoglobin - Date Last (1yr)	Hemoglobin - Date Last (1yr)=Unknown	0	
+Hemoglobin - Date Last (7yr)	Hemoglobin - Date Last (7yr)=Unknown	0	
+Beta-2 Microglobulin=Unknown	Beta-2 Microglobulin=Test Taken	1	
+ZAP70=Negative	ZAP70=Positive or Missing	1	B
+ZAP70=Positive	ZAP70=Negative or Missing	1	B
+INR - Date Last (3m)	INR - Date Last (3m)=Unknown	0	
+ZAP70=Unknown	ZAP70=Test Taken	1	B
+CD38=Negative	CD38=Positive or Unknown	1	B
+Lactate dehydrogenase - Value Mean (3m)	Lactate dehydrogenase - Value Mean (3m)=Unknown	0	
+Lactate dehydrogenase - Value Mean (1yr)	Lactate dehydrogenase - Value Mean (1yr)=Unknown	0	
+Lactate dehydrogenase - Value Mean (7yr)	Lactate dehydrogenase - Value Mean (7yr)=Unknown	0	
+Lactate dehydrogenase - Value Median (3m)	Lactate dehydrogenase - Value Median (3m)=Unknown	0	
+Lactate dehydrogenase - Value Median (1yr)	Lactate dehydrogenase - Value Median (1yr)=Unknown	0	
+Lactate dehydrogenase - Value Median (7yr)	Lactate dehydrogenase - Value Median (7yr)=Unknown	0	
+Leukocytes - Value Mean (3m)	Leukocytes - Value Mean (3m)=Unknown	0	
+Leukocytes - Value Mean (1yr)	Leukocytes - Value Mean (1yr)=Unknown	0	
+Leukocytes - Value SD (3m)	Leukocytes - Value SD (3m)=Unknown	0	
+Leukocytes - Value SD (1yr)	Leukocytes - Value SD (1yr)=Unknown	0	
+Leukocytes - Value SD (7yr)	Leukocytes - Value SD (7yr)=Unknown	0	
+Leukocytes - Value Max (3m)	Leukocytes - Value Max (3m)=Unknown	0	
+Leukocytes - Value Max (1yr)	Leukocytes - Value Max (1yr)=Unknown	0	
+Leukocytes - Value Median (3m)	Leukocytes - Value Median (3m)=Unknown	0	
+Leukocytes - Value Median (1yr)	Leukocytes - Value Median (1yr)=Unknown	0	
+CD38=Positive	CD38=Negative or Unknown	1	B
+Leukocytes - Value QuadFit_coefc (1yr)	Leukocytes - Value QuadFit_coefc (1yr)=Unknown	0	
+Leukocytes - Date Mean (3m)	Leukocytes - Date Mean (3m)=Unknown	0	
+Leukocytes - Date Last (3m)	Leukocytes - Date Last (3m)=Unknown	0	
+Leukocytes - Date Last (1yr)	Leukocytes - Date Last (1yr)=Unknown	0	
+Leukocytes - Date Last (7yr)	Leukocytes - Date Last (7yr)=Unknown	0	
+Absolute  Lymphocyte Count - Value Mean (3m)	Absolute  Lymphocyte Count - Value Mean (3m)=Unknown	0	
+Absolute  Lymphocyte Count - Value Mean (1yr)	Absolute  Lymphocyte Count - Value Mean (1yr)=Unknown	0	
+Absolute  Lymphocyte Count - Value SD (3m)	Absolute  Lymphocyte Count - Value SD (3m)=Unknown	0	
+Absolute  Lymphocyte Count - Value SD (1yr)	Absolute  Lymphocyte Count - Value SD (1yr)=Unknown	0	
+Absolute  Lymphocyte Count - Value SD (7yr)	Absolute  Lymphocyte Count - Value SD (7yr)=Unknown	0	
+Absolute  Lymphocyte Count - Value Max (3m)	Absolute  Lymphocyte Count - Value Max (3m)=Unknown	0	
+Absolute  Lymphocyte Count - Value Max (1yr)	Absolute  Lymphocyte Count - Value Max (1yr)=Unknown	0	
+Absolute  Lymphocyte Count - Value Min (7yr)	Absolute  Lymphocyte Count - Value Min (7yr)=Unknown	0	
+Absolute  Lymphocyte Count - Value Median (3m)	Absolute  Lymphocyte Count - Value Median (3m)=Unknown	0	
+Absolute  Lymphocyte Count - Value Median (1yr)	Absolute  Lymphocyte Count - Value Median (1yr)=Unknown	0	
+Absolute  Lymphocyte Count - Value LinearFit_coefa (7yr)	Absolute  Lymphocyte Count - Value LinearFit_coefa (7yr)=Unknown	0	
+Absolute  Lymphocyte Count - Date Mean (3m)	Absolute  Lymphocyte Count - Date Mean (3m)=Unknown	0	
+Absolute  Lymphocyte Count - Date Mean (1yr)	Absolute  Lymphocyte Count - Date Mean (1yr)=Unknown	0	
+Absolute  Lymphocyte Count - Date Last (3m)	Absolute  Lymphocyte Count - Date Last (3m)=Unknown	0	
+Absolute  Lymphocyte Count - Date Last (1yr)	Absolute  Lymphocyte Count - Date Last (1yr)=Unknown	0	
+CD38=Unknown	CD38=Test Taken	1	B
+Sodium (NA+) - Value LinearFit_coefa (1yr)	Sodium (NA+) - Value LinearFit_coefa (1yr)=Unknown	0	
+Neutrophilocytes - Value SD (3m)	Neutrophilocytes - Value SD (3m)=Unknown	0	
+Neutrophilocytes - Value SD (1yr)	Neutrophilocytes - Value SD (1yr)=Unknown	0	
+Neutrophilocytes - Date Mean (3m)	Neutrophilocytes - Date Mean (3m)=Unknown	0	
+Neutrophilocytes - Date Last (3m)	Neutrophilocytes - Date Last (3m)=Unknown	0	
+Neutrophilocytes - Date Last (1yr)	Neutrophilocytes - Date Last (1yr)=Unknown	0	
+Binet Stage A	Binet Stage B,C or Unknown	1	B
+Binet Stage B	Binet Stage A,C or Unknown	1	B
+Binet Stage C	Binet Stage A,B or Unknown	1	B
+Erytrhocyte (MCV) - Value Mean (3m)	Erytrhocyte (MCV) - Value Mean (3m)=Unknown	0	
+Erytrhocyte (MCV) - Value Mean (7yr)	Erytrhocyte (MCV) - Value Mean (7yr)=Unknown	0	
+ECOG Status=1	ECOG Status is not 1 or is Unknown	1	
+Absolute Erythrocyte Count - Value Mean (3m)	Absolute Erythrocyte Count - Value Mean (3m)=Unknown	0	
+Absolute Erythrocyte Count - Value Mean (1yr)	Absolute Erythrocyte Count - Value Mean (1yr)=Unknown	0	
+Absolute Erythrocyte Count - Value Mean (7yr)	Absolute Erythrocyte Count - Value Mean (7yr)=Unknown	0	
+Absolute Erythrocyte Count - Value Max (1yr)	Absolute Erythrocyte Count - Value Max (1yr)=Unknown	0	
+Absolute Erythrocyte Count - Value Min (3m)	Absolute Erythrocyte Count - Value Min (3m)=Unknown	0	
+Absolute Erythrocyte Count - Value Min (1yr)	Absolute Erythrocyte Count - Value Min (1yr)=Unknown	0	
+Absolute Erythrocyte Count - Value Min (7yr)	Absolute Erythrocyte Count - Value Min (7yr)=Unknown	0	
+Absolute Erythrocyte Count - Date Mean (1yr)	Absolute Erythrocyte Count - Date Mean (1yr)=Unknown	0	
+Hematocrit - Value Mean (3m)	Hematocrit - Value Mean (3m)=Unknown	0	
+Hematocrit - Value Mean (1yr)	Hematocrit - Value Mean (1yr)=Unknown	0	
+Hematocrit - Value Mean (7yr)	Hematocrit - Value Mean (7yr)=Unknown	0	
+Hematocrit - Value SD (3m)	Hematocrit - Value SD (3m)=Unknown	0	
+Hematocrit - Value Min (3m)	Hematocrit - Value Min (3m)=Unknown	0	
+Hematocrit - Value Min (1yr)	Hematocrit - Value Min (1yr)=Unknown	0	
+Hematocrit - Value Min (7yr)	Hematocrit - Value Min (7yr)=Unknown	0	
+Hematocrit - Value Skewness (7yr)	Hematocrit - Value Skewness (7yr)=Unknown	0	
+Hematocrit - Value LinearFit_coefa (1yr)	Hematocrit - Value LinearFit_coefa (1yr)=Unknown	0	
+ECOG Status=0	ECOG Status is not 0 or is Unknown	1	B
+Mean Cell Hemoglobin - Value SD (3m)	Mean Cell Hemoglobin - Value SD (3m)=Unknown	0	
+Mean Cell Hemoglobin Concentration - Value Min (3m)	Mean Cell Hemoglobin Concentration - Value Min (3m)=Unknown	0	
+Mean Cell Hemoglobin Concentration - Number of Tests Taken (3m)	Mean Cell Hemoglobin Concentration - Number of Tests Taken (3m)=Unknown	0	
+Mean Cell Hemoglobin Concentration - Date Last (3m)	Mean Cell Hemoglobin Concentration - Date Last (3m)=Unknown	0	
+Blood Culture: Negative - No growth (3m)	Blood Culture: Negative - No growth (3m)=Unknown	1	
+Familial CLL=Unknown	Familial CLL=Known or Missing	1	B
+Blood Culture: Negative - No growth (1yr)	Blood Culture: Negative - No growth (1yr)=Unknown	1	
+Blood Culture: Negative - No growth (7yr)	Blood Culture: Negative - No growth (7yr)=Unknown	1	
+Transferrin - Value Min (1yr)	Transferrin - Value Min (1yr)=Unknown	0	
+Uric Acid - Value Mean (1yr)	Uric Acid - Value Mean (1yr)=Unknown	0	
+Uric Acid - Value Max (3m)	Uric Acid - Value Max (3m)=Unknown	0	
+Uric Acid - Value Max (1yr)	Uric Acid - Value Max (1yr)=Unknown	0	
+Uric Acid - Value Max (7yr)	Uric Acid - Value Max (7yr)=Unknown	0	
+Uric Acid - Value Min (1yr)	Uric Acid - Value Min (1yr)=Unknown	0	
+Blastic cells - Date Last (1yr)	Blastic cells - Date Last (1yr)=Unknown	0	
+Promyelocytes  - Date Last (1yr)	Promyelocytes  - Date Last (1yr)=Unknown	0	
+Myelocytes - Date Last (1yr)	Myelocytes - Date Last (1yr)=Unknown	0	
+Metamyelocytes  - Date Last (1yr)	Metamyelocytes  - Date Last (1yr)=Unknown	0	
+IGHV mutated	IGHV not mutated or Unknown	1	B
+PSA - Date Mean (1yr)	PSA - Date Mean (1yr)=Unknown	0	
+Smudge cells - Value Max (1yr)	Smudge cells - Value Max (1yr)=Unknown	0	
+IGHV unmutated	IGHV mutated or Unknown	1	B
+Amylase - Date Last (3m)	Amylase - Date Last (3m)=Unknown	0	
+Creatine Kinase  - Value Max (1yr)	Creatine Kinase  - Value Max (1yr)=Unknown	0	
+New malignancy diagnois (AZCA1) (1yr)	New malignancy diagnois (AZCA1) (1yr)=Unknown	1	
+No. of Rare Diagnosies (1yr)	No. of Rare Diagnosies (1yr)=Unknown	1	
+No. of Rare Diagnosies (7yr)	No. of Rare Diagnosies (7yr)=Unknown	1	
+Myeloid Immature Cells - Value LinearFit_coefa (1yr)	Myeloid Immature Cells - Value LinearFit_coefa (1yr)=Unknown	0	
+IGHV status=Unknown	IGHV status=Unknown=Unknown	1	B
+Platelets  - Value Mean (7yr)	Platelets  - Value Mean (7yr)=Unknown	0	
+Platelets  - Value Min (7yr)	Platelets  - Value Min (7yr)=Unknown	0	
+Platelets  - Value LinearFit_coefb (1yr)	Platelets  - Value LinearFit_coefb (1yr)=Unknown	0	
+Platelets  - Value QuadFit_coefc (7yr)	Platelets  - Value QuadFit_coefc (7yr)=Unknown	0	
+Platelets  - Date Last (1yr)	Platelets  - Date Last (1yr)=Unknown	0	
+Infection Dates LinearFit_coefa (7yr)	Infection Dates LinearFit_coefa (7yr)=Unknown	1	C
+Infection Dates QuadFit_coefc (3m)	Infection Dates QuadFit_coefc (3m)=Unknown	1	C
+Infection Dates Mean (3m)	Infection Dates Mean (3m)=Unknown	1	C
+Infection Dates Mean (1yr)	Infection Dates Mean (1yr)=Unknown	1	C
+Infection Dates Standard Deviation (1yr)	Infection Dates Standard Deviation (1yr)=Unknown	1	C
+Last Infection Date (3m)	Last Infection Date (3m)=Unknown	1	C
+Earliest Infection Date (7yr)	Earliest Infection Date (7yr)=Unknown	1	C
+Infection Dates Skewness (3m)	Infection Dates Skewness (3m)=Unknown	1	C
+Infection Dates Kurtosis (7yr)	Infection Dates Kurtosis (7yr)=Unknown	1	C
+Mininum No. of Days Between Infections (7yr)	Mininum No. of Days Between Infections (7yr)=Unknown	1	C
+Mean No. of Days Between Infections (1yr)	Mean No. of Days Between Infections (1yr)=Unknown	1	C
+Mean No. of Days Between Infections (7yr)	Mean No. of Days Between Infections (7yr)=Unknown	1	C
+mutations detected, DNA (F15812) (3m)	mutations detected, DNA (F15812) (3m)=Unknown	1	
+mutations detected, DNA (F15812) (1yr)	mutations detected, DNA (F15812) (1yr)=Unknown	1	
+FISH (P33765) (3m)	FISH (P33765) (3m)=Unknown	1	
+FISH (P33765) (1yr)	FISH (P33765) (1yr)=Unknown	1	
+PCR (P33B31) (3m)	PCR (P33B31) (3m)=Unknown	1	
+PCR (P33B31) (1yr)	PCR (P33B31) (1yr)=Unknown	1	
+flowcytometry (P33600) (3m)	flowcytometry (P33600) (3m)=Unknown	1	
+flowcytometry (P33600) (1yr)	flowcytometry (P33600) (1yr)=Unknown	1	
+del(13q) (M632A0) (3m)	del(13q) (M632A0) (3m)=Unknown	1	
+del(13q) (M632A0) (1yr)	del(13q) (M632A0) (1yr)=Unknown	1	
+normal cells (M00120) (7yr)	normal cells (M00120) (7yr)=Unknown	1	
+needle biopsy (P30990) (3m)	needle biopsy (P30990) (3m)=Unknown	1	
+needle biopsy (P30990) (1yr)	needle biopsy (P30990) (1yr)=Unknown	1	
+needle biopsy (P30990) (7yr)	needle biopsy (P30990) (7yr)=Unknown	1	
+DNA hybridisation (P33740) (3m)	DNA hybridisation (P33740) (3m)=Unknown	1	
+DNA hybridisation (P33740) (1yr)	DNA hybridisation (P33740) (1yr)=Unknown	1	
+no malignancy (M09450) (7yr)	no malignancy (M09450) (7yr)=Unknown	1	
+mutations detected, DNA (F1581B) (3m)	mutations detected, DNA (F1581B) (3m)=Unknown	1	
+mutations detected, DNA (F1581B) (1yr)	mutations detected, DNA (F1581B) (1yr)=Unknown	1	
+del(13q)=Negative	del(13q)=Negative=Unknown	1	B
+more than 2 locations of tumor (MÆ0025) (3m)	more than 2 locations of tumor (MÆ0025) (3m)=Unknown	1	
+more than 2 locations of tumor (MÆ0025) (1yr)	more than 2 locations of tumor (MÆ0025) (1yr)=Unknown	1	
+more than 2 locations of tumor (MÆ0025) (7yr)	more than 2 locations of tumor (MÆ0025) (7yr)=Unknown	1	
+biopsy (P30610) (7yr)	biopsy (P30610) (7yr)=Unknown	1	
+OBS pro diagnosis (pathology) (ÆYYY00) (3m)	OBS pro diagnosis (pathology) (ÆYYY00) (3m)=Unknown	1	
+OBS pro diagnosis (pathology) (ÆYYY00) (1yr)	OBS pro diagnosis (pathology) (ÆYYY00) (1yr)=Unknown	1	
+OBS pro diagnosis (pathology) (ÆYYY00) (7yr)	OBS pro diagnosis (pathology) (ÆYYY00) (7yr)=Unknown	1	
+seborrheic keratosis (M72750) (7yr)	seborrheic keratosis (M72750) (7yr)=Unknown	1	
+normal tissue (M00100) (7yr)	normal tissue (M00100) (7yr)=Unknown	1	
+immunoblastic lymphoma (M96123) (3m)	immunoblastic lymphoma (M96123) (3m)=Unknown	1	
+immunoblastic lymphoma (M96123) (1yr)	immunoblastic lymphoma (M96123) (1yr)=Unknown	1	
+no suspicion of malignancy (M09462) (7yr)	no suspicion of malignancy (M09462) (7yr)=Unknown	1	
+no mutations detected, DNA (F15811) (3m)	no mutations detected, DNA (F15811) (3m)=Unknown	1	
+no mutations detected, DNA (F15811) (1yr)	no mutations detected, DNA (F15811) (1yr)=Unknown	1	
+hyperplasia (M72000) (1yr)	hyperplasia (M72000) (1yr)=Unknown	1	
+hyperplasia (M72000) (7yr)	hyperplasia (M72000) (7yr)=Unknown	1	
+no tumor cells (M09460) (7yr)	no tumor cells (M09460) (7yr)=Unknown	1	
+resection (P30620) (7yr)	resection (P30620) (7yr)=Unknown	1	
+fine needle aspiration (P31060) (1yr)	fine needle aspiration (P31060) (1yr)=Unknown	1	
+fine needle aspiration (P31060) (7yr)	fine needle aspiration (P31060) (7yr)=Unknown	1	
+inflammation (M40000) (1yr)	inflammation (M40000) (1yr)=Unknown	1	
+inflammation (M40000) (7yr)	inflammation (M40000) (7yr)=Unknown	1	
+ekscision biopsy (P30611) (7yr)	ekscision biopsy (P30611) (7yr)=Unknown	1	
+basocellulary carcinoma (M80903) (7yr)	basocellulary carcinoma (M80903) (7yr)=Unknown	1	
+no mutations detected, DNA (F1581A) (3m)	no mutations detected, DNA (F1581A) (3m)=Unknown	1	
+no mutations detected, DNA (F1581A) (1yr)	no mutations detected, DNA (F1581A) (1yr)=Unknown	1	
+chronic inflammation (M43000) (7yr)	chronic inflammation (M43000) (7yr)=Unknown	1	
+actinic keratosis (M72850) (7yr)	actinic keratosis (M72850) (7yr)=Unknown	1	
+tubulary adenoma (M82110) (7yr)	tubulary adenoma (M82110) (7yr)=Unknown	1	
+del(13q)=Positive	del(13q)=Positive=Unknown	1	B
+malignant lymphoma (M96003) (7yr)	malignant lymphoma (M96003) (7yr)=Unknown	1	
+Differential count (P28120) (1yr)	Differential count (P28120) (1yr)=Unknown	1	
+blood smear (T0X000) (7yr)	blood smear (T0X000) (7yr)=Unknown	1	
+acute and chronic inflammation (M42100) (7yr)	acute and chronic inflammation (M42100) (7yr)=Unknown	1	
+del(11q) (M632B0) (3m)	del(11q) (M632B0) (3m)=Unknown	1	
+del(11q) (M632B0) (1yr)	del(11q) (M632B0) (1yr)=Unknown	1	
+Planocellulary carcinoma (M80703) (1yr)	Planocellulary carcinoma (M80703) (1yr)=Unknown	1	

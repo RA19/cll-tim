@@ -1,0 +1,16 @@
+TO INSTALL CLL-TIM using conda terminal:
+conda config --set solver classic
+conda config --set channel_priority strict
+conda env create -f environment.yml
+conda activate clltim_calc_env
+pip install spyder-kernels==2.5.2
+pip install xgboost==0.82
+
+
+TO RUN
+conda activate clltim_calc_env
+conda activate base
+spyder
+
+NOTE: In your python IDe make sure that the Python Interpreter points towards the location of your environment
+for example: C:\Users.......anaconda3\envs\clltim_calc_env\python.exe

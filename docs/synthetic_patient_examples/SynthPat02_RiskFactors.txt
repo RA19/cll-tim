@@ -1,0 +1,17 @@
+Patient SynthPat02: Predicted as Low-Risk of Infection or CLL Treatment in the next 2-years
+Note: CLL-TIM predicts this with High-Confidence
+
+
+Personalized High-Risk Factors for Patient: SynthPat02
+1: Mean No. of Days Between Infections (7yr)
+2: Smudge cells - Value Max (1yr) with a value of 0.01
+3: Absolute  Lymphocyte Count - Value Min (7yr) with a value of 1.8
+4: Platelets  - Value LinearFit_coefb (1yr)=Unknown
+5: Leukocytes - Value Max (1yr) with a value of 6.2
+
+Personalized Low-Risk Factors for Patient: SynthPat02
+1: Beta-2 Microglobulin- Value Mean (1yr) with a value of 1.8
+2: Leukocytes - Date Last (7yr) with a value of 168.0
+3: Absolute Erythrocyte Count - Date Mean (1yr) with a value of 168.0
+4: Leukocytes - Value Max (3m)=Unknown
+5: IGHV mutated or Unknown

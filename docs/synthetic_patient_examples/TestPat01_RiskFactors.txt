@@ -1,0 +1,18 @@
+Patient TestPat01: Predicted as High-Risk of Infection or CLL Treatment in the next 2-years
+Note: CLL-TIM predicts this with High-Confidence
+
+Personalized High-Risk Factors for Patient: TestPat01
+
+Personalized High-Risk Factors for Patient: TestPat01
+1: Mean No. of Days Between Infections (7yr) with a value of 2587.0
+2: Binet Stage B,C or Unknown
+3: Transferrin - Value Min (1yr) with a value of 21.733643999999998
+4: Beta-2 Microglobulin- Value Mean (1yr) with a value of 5.7
+5: IGHV unmutated
+
+Personalized Low-Risk Factors for Patient: TestPat01
+1: Leukocytes - Date Last (7yr) with a value of 401.0
+2: Basophilocytes - Date Last (1yr) with a value of 114.0
+3: Absolute Erythrocyte Count - Date Mean (1yr) with a value of 274.0
+4: Platelets  - Value Mean (7yr) with a value of 333.5
+5: Uric Acid - Value Min (1yr) with a value of 0.21

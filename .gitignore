@@ -1,0 +1,5 @@
+# Generated patient reports (reproduced byte-identically by a fresh run)
+CLLTIMOutput/*
+!CLLTIMOutput/.gitkeep
+__pycache__/
+*.pyc
