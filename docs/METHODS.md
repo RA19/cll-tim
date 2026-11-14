@@ -1,85 +1,97 @@
 # Model and methods
 
-[Overview](../README.md) · [Using CLL-TIM](USAGE.md) · [Evidence](EVIDENCE.md) · [Implementation](IMPLEMENTATION.md)
+[Overview](../README.md) · [Using CLL-TIM](USAGE.md) · [Validation](EVIDENCE.md) · [Technical reference](IMPLEMENTATION.md)
 
-## Combining different views of patient history
+## Modeling patient history
 
-CLL-TIM combines 28 learners selected to provide different views of heterogeneous clinical data. The development process varied algorithms, hyperparameters, feature subsets and target outcomes. Diversity was a design objective; it is not a guarantee that all learner errors are independent.
+We developed CLL-TIM to predict the two-year composite outcome of infection and/or CLL treatment using multiple perspectives on a patient's clinical history. We combined baseline CLL prognostic markers with longitudinal laboratory results, infection histories and other routinely collected clinical data.
 
-The original feature search spanned **7,288 features**. The selected ensemble uses **84 variables encoded into 228 features**, including summaries over three-month, one-year and seven-year look-back windows. A variable such as a laboratory measurement can produce several features: its minimum value, mean, trend, variability, or time since the last test.
+During development, we constructed **7,288 features** and selected an ensemble using **84 variables represented by 228 features**. We modeled three-month, one-year and seven-year histories. For a laboratory variable, different features can represent its mean, minimum, variability, rate of change, number of tests or time since the last test.
 
-![2020 Figure 1: data assembly, feature construction, generation and selection of the ensemble, and intended trial selection.](figures/paper/nc_fig1_development.png)
+![Our development of CLL-TIM: patient data, feature engineering, learner generation, ensemble selection and PreVent-ACaLL patient selection.](figures/paper/nc_fig1_development.png)
 
-*Agius et al., Nature Communications (2020), Figure 1. Overview of development and the intended PreVent-ACaLL selection pathway; this is not an inference-time architecture diagram.*
+*Our 2020 Figure 1: development of CLL-TIM and the clinical-trial selection pathway.*
 
-## Selecting the ensemble
+## Developing the ensemble
 
-The development protocol generated 2,000 candidate learners across seven algorithm families. Of these, 1,000 targeted the composite outcome, 500 treatment and 500 infection as a first event. Learners below their respective population-mean cross-validation MCC were filtered before ensemble selection.
+We generated 2,000 candidate base-learners with different algorithm families, hyperparameters, feature subsets and target outcomes. Of these, 1,000 modeled the composite outcome, 500 CLL treatment and 500 infection as a first event. We used seven algorithm families spanning linear and nonlinear decision boundaries, and filtered out learners below their respective population-mean cross-validation MCC before ensemble selection.
 
-A genetic algorithm generated 29 ensembles containing 2–30 learners. Ranking used six criteria combining performance and diversity considerations. The top-ranked ensemble was then evaluated on held-out cohorts. The supplied repository contains the fitted ensemble, not the complete executable training and selection workflow.
+We then used a genetic algorithm to generate 29 ensembles containing 2–30 learners. We ranked these ensembles using six performance and diversity criteria and selected the highest-ranked ensemble as CLL-TIM. We evaluated the selected model on held-out internal and external cohorts.
 
-| Selected learner family | Count |
+| Algorithm family in CLL-TIM | Number of learners |
 |---|---|
 | XGBoost | 13 |
 | Random Forest | 7 |
 | Extra Trees | 4 |
-| Elastic-net linear classifier (`SGDClassifier`) | 2 |
+| Elastic-net linear classifier | 2 |
 | Logistic Regression | 2 |
 
-Twenty learners target the composite outcome, five treatment and three infection as a first event.
+The final ensemble contains 20 learners modeling the composite outcome, five modeling CLL treatment and three modeling infection as a first event. Feature subsets provide different views of the available clinical history.
 
-![2020 Figure 2: the selected learners, variables and feature encodings.](figures/paper/nc_fig2_ensemble_composition.png)
+![CLL-TIM ensemble composition: 28 base-learners, their clinical variables and feature encodings.](figures/paper/nc_fig2_ensemble_composition.png)
 
-*Agius et al., Nature Communications (2020), Figure 2. Variables and encodings used by the selected ensemble, with algorithm families and training outcomes. The visualization condenses the variable set; see the paper and Supplementary Data 1 for full details.*
+*Our 2020 Figure 2: algorithm families, target outcomes, variables and feature encodings. The figure presents a condensed view of the variables; the complete feature set is described in Supplementary Data 1.*
 
-## Scoring in the supplied mobile implementation
+## Predicting infection and CLL treatment
 
-The application constructs a 228-feature vector. Each learner takes its own subset. Non-XGBoost learners use stored imputation values and fitted scalers; XGBoost accepts missing values internally. The application averages probability column 1 from all 28 learners:
+For a patient, CLL-TIM constructs a 228-feature vector and passes the relevant subset to each learner. Non-XGBoost learners use fitted imputation values and scalers; XGBoost handles missing values internally. We combine the learners using soft voting:
 
-$$s = \frac{1}{28}\sum_{i=1}^{28} f_i(\mathbf{x}_i).$$
+$$s = \frac{1}{28}\sum_{i=1}^{28} f_i(\mathbf{x}_i),$$
 
-It rounds this mean to two decimals before assigning report categories. The stored min/max arrays normalize feature values for parts of the report; they do **not** normalize learner probabilities before averaging.
+where each learner returns a class-1 probability. The scoring script rounds the combined prediction to two decimals for reporting. Stored min/max arrays are used for feature displays; the probabilities are averaged directly.
 
-![Individual learner outputs for the nine synthetic example patients.](figures/fig_ensemble_votes.png)
+![The 28 learner predictions and their mean for each of nine synthetic patients.](figures/fig_ensemble_votes.png)
 
-*Synthetic demonstration generated by [clltim_showcase.py](../examples/clltim_showcase.py). Dots show individual learner outputs, black vertical marks show their means, and horizontal bars show one standard deviation. The confidence label uses the rounded mean; the standard deviation is not used to assign it. This chart provides no clinical performance estimate.*
+*Synthetic patient illustration. Dots show individual learner predictions, vertical marks show their means and horizontal bars show one standard deviation. Predictive confidence is assigned from the rounded mean. [Generate this figure](../examples/clltim_showcase.py).*
 
-## Confidence
+## Predictive confidence
 
-The mean score is used as a confidence proxy: values nearer the extremes are treated as more confident. The supplied implementation labels scores below 0.28 or at least 0.58 high confidence. Scores between those boundaries are low confidence; it still emits a score for them.
+We designed CLL-TIM to accompany each risk prediction with an estimate of predictive confidence, calculated without knowledge of the patient's outcome. We use the mean probabilistic prediction as a confidence proxy: predictions closer to the extremes indicate greater certainty, while predictions closer to the decision boundary indicate greater uncertainty.
 
-The original thresholds were selected on a validation cohort to meet trial-selection requirements: approximately 20% high-risk/high-confidence and 30% low-risk/high-confidence predictions. Fixed thresholds do not guarantee those proportions in a different cohort. The German external comparison used cohort-specific T20–30 selection. The 2024 paper also explores a higher high-risk threshold; see [evidence](EVIDENCE.md).
+During development, we selected thresholds on the validation cohort to identify approximately 20% of patients as high risk with high confidence and 30% as low risk with high confidence. The scoring script uses **≥0.58 for high-risk/high-confidence** and **<0.28 for low-risk/high-confidence** predictions. The proportion classified with high confidence depends on the cohort. In the external German comparison, we selected the corresponding top 20% high-risk and bottom 30% low-risk predictions using T20–30.
 
-Confidence is not separately calculated from the variance of the votes. The reported hazard ratios describe separation between outcome groups; their ratio is not an accuracy multiplier.
+We found stronger separation of high- and low-risk outcomes among high-confidence predictions. Our prospective PreVent-ACaLL results also supported predictive confidence: high-risk/high-confidence patients had worse outcomes than high-risk/low-confidence patients. See [validation](EVIDENCE.md).
 
-## Why infection and treatment were modeled together
+## Why we modeled infection and treatment together
 
-![2020 Figure 6: comparison of models trained on different outcomes and recall under alternative infection definitions.](figures/paper/nc_fig6_outcome_modelling.png)
+We modeled the composite outcome to capture both infectious complications and CLL progression leading to treatment. We compared ensembles trained on infection, treatment or the composite outcome, and examined their ability to detect each outcome.
 
-*Agius et al., Nature Communications (2020), Figure 6. Panel a compares average recall across ensembles trained on infection, treatment or the composite outcome, on n=530 internal-test patients with full two-year follow-up. Panels b–c compare infection definitions and confidence selection in BENCH-I. This figure does not plot performance against ensemble size.*
+![Our comparison of infection, treatment and composite-outcome modeling, with recall for different infection definitions.](figures/paper/nc_fig6_outcome_modelling.png)
 
-## Missing data
+*Our 2020 Figure 6. Panel a compares average recall across ensembles in n=530 internal-test patients with full two-year follow-up. Panels b–c compare infection definitions and confidence selection in BENCH-I.*
 
-The published approach handles missingness at three levels: features can encode unavailable measurements or test timing; learners can handle missing values internally or through imputation; and feature subsets distribute dependence on individual variables across learners.
+## Handling missing data
 
-![2024 Figure 6: feature-level, algorithm-level and ensemble-level handling of missing data.](figures/paper/npj_fig6_missingness_layers.jpg)
+We addressed missingness at three levels:
 
-*Agius et al., npj Digital Medicine (2024), Figure 6. A conceptual explanation of missing-data handling, not an empirical performance curve. The deployment paper identifies particular sensitivity to missing key variables such as Binet stage.*
+- **Feature level:** representations of missing measurements, test frequency and test timing allow missingness to carry information.
+- **Algorithm level:** XGBoost handles missing values internally; other learners use fitted imputation.
+- **Ensemble level:** feature subsets distribute dependence on individual variables across learners.
 
-The mobile application processes baseline, laboratory and infection-indicator inputs, and fills unused pathology/diagnosis positions with zeros. It also assigns Binet A when no Binet category is encoded. These implementation choices should be distinguished from a general claim that any missing input is harmless.
+![Our three levels of missing-data handling in CLL-TIM: feature, algorithm and ensemble.](figures/paper/npj_fig6_missingness_layers.jpg)
 
-## Contributing factors
+*Our 2024 Figure 6: missing-data representations, imputation/internal handling and feature bagging.*
 
-The publications use SHAP to analyze population and patient-specific factors. Features visible in the published top-factor analysis include beta-2 microglobulin, IGHV, Binet stage, leukocyte measures and infection history.
+In the EHR deployment, we found CLL-TIM could provide predictions despite substantial missingness, while missing key variables such as Binet stage affected performance. The scoring script reads baseline markers, laboratory results and infection indicators. It fills pathology/diagnosis positions internally and assigns Binet A when no Binet category is encoded. [Technical reference](IMPLEMENTATION.md).
 
-![2020 Figure 7: population-level factors for the composite outcome and factors specific to infection-first and treatment-first outcomes.](figures/paper/nc_fig7_risk_factors.png)
+## Personalized risk factors
 
-*Agius et al., Nature Communications (2020), Figure 7. Analysis on the Danish research population (n=3,720), not a nine-patient synthetic summary.*
+We use SHAP to identify the factors contributing to each patient's predicted risk. We rank the factors pushing towards higher risk and those pushing towards lower risk, providing an explanation specific to the patient's combination of clinical findings and history.
 
-![2020 Figure 9: the historical web interface and patient-specific patterns of contributing factors.](figures/paper/nc_fig9_multiple_paths.jpg)
+At a population level, we identified risk factors including beta-2 microglobulin, IGHV mutational status, Binet stage, leukocyte measures and previous infections. Their contributions are nonlinear and depend on the other information available for a patient. Two patients with similar predicted risk may therefore have different personalized risk factors.
 
-*Agius et al., Nature Communications (2020), Figure 9. Patient heterogeneity and the historical web interface; the image does not establish that the old web service is currently available.*
+![Risk factors identified by CLL-TIM for the composite outcome, infection before treatment and treatment before infection.](figures/paper/nc_fig7_risk_factors.png)
 
-The supplied mobile report aggregates SHAP outputs with differing class directions and scales. Its explanation implementation requires separate validation; it is not presented as an additive decomposition of the ensemble probability. See [implementation findings](IMPLEMENTATION.md#feature-explanations).
+*Our 2020 Figure 7: population-level risk-factor analysis in 3,720 Danish patients.*
 
-Methods and figure captions are grounded in the [2020 paper and supplement](EVIDENCE.md#original-development-and-validation--2020) and [2024 deployment paper](EVIDENCE.md#ehr-deployment--2024). Publication figures are © the original authors under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); [full figure register](figures/SOURCES.md).
+![Personalized risk factors illustrating different paths towards high risk in patients with CLL.](figures/paper/nc_fig9_multiple_paths.jpg)
+
+*Our 2020 Figure 9: the original web interface and patient-specific risk-factor patterns.*
+
+The [technical reference](IMPLEMENTATION.md#personalized-risk-factors) documents the SHAP class and output-scale conventions in the scoring script.
+
+## Sources
+
+Our [2020 model publication and supplement](EVIDENCE.md#publications) describe feature generation, model selection, confidence and personalized risk factors. Our [2024 deployment publication](EVIDENCE.md#ehr-deployment-and-validation--2024) describes data harmonization, missingness, automation and EHR monitoring.
+
+Publication figures: © the original authors, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Figure sources and attribution](figures/SOURCES.md).

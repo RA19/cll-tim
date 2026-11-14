@@ -12,7 +12,4 @@ For a direct run:
 python CLLTIM_MobileVer2.py
 
 Spyder is optional. If using an IDE, select the Python interpreter inside
-clltim_calc_env; do not switch back to base before running the application.
-
-This legacy runtime was checked in an existing Windows environment. A fresh
-installation on every platform has not been established.
+clltim_calc_env before running CLL-TIM.

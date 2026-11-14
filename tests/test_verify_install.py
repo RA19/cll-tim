@@ -38,8 +38,8 @@ class VerificationTests(unittest.TestCase):
         patcher.start()
         self.addCleanup(patcher.stop)
 
-    def run_main(self, run_app):
-        with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(verify, "run_app", side_effect=run_app):
+    def run_main(self, run_clltim):
+        with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(verify, "run_clltim", side_effect=run_clltim):
             return verify.main()
 
     def generate(self, workspace):
@@ -58,7 +58,7 @@ class VerificationTests(unittest.TestCase):
 
     def test_missing_reference_fails_before_execution(self):
         (self.golden / "Example01_RiskFactors.txt").unlink()
-        with mock.patch.object(verify, "run_app") as run:
+        with mock.patch.object(verify, "run_clltim") as run:
             with self.assertRaisesRegex(SystemExit, "missing or empty reference"):
                 verify.main()
             run.assert_not_called()
@@ -92,7 +92,7 @@ class VerificationTests(unittest.TestCase):
         self.assertFalse(verify._cell_eq("High", "Low"))
         self.assertFalse(verify._cell_eq("", "0"))
 
-    def test_application_failure_does_not_copy_outputs(self):
+    def test_clltim_failure_does_not_copy_outputs(self):
         with self.assertRaisesRegex(SystemExit, "non-zero status"):
             self.run_main(lambda _: subprocess.CompletedProcess([], 1, "", "failure"))
         self.assertEqual(list(self.output.iterdir()), [])

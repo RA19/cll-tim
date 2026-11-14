@@ -1,70 +1,66 @@
-# Implementation and reproducibility
+# Technical reference
 
-[Overview](../README.md) · [Using CLL-TIM](USAGE.md) · [Evidence](EVIDENCE.md) · [Methods](METHODS.md)
+[Overview](../README.md) · [Using CLL-TIM](USAGE.md) · [Validation](EVIDENCE.md) · [Methods](METHODS.md)
 
-## What this repository supplies
+## Repository contents
 
 | Path | Purpose |
 |---|---|
-| `CLLTIM_MobileVer2.py` | Standalone multi-patient application; header dated 30 September 2025 |
-| `CLLTIM_MobileVer1.py` | Historical application; its default single-patient input is not bundled |
-| `CLLTIMData/` | 28 fitted learners, feature indexes/dictionaries, fitted scalers, imputation values and reporting assets |
-| `PatientFiles/SynthPat_Multi.csv` | Nine synthetic patients |
-| `PatientFileFormat.xlsx` | Input dictionary |
-| `CLLTIMOutput/` | Generated reports; ignored by Git |
-| `examples/verify_install.py` | Fresh-output synthetic run with strict reference comparison |
-| `examples/clltim_showcase.py` | Learner-vote illustration, with no SHAP or missingness-performance claims |
-| `docs/synthetic_patient_examples/` | Bundled reference reports, text and CSVs |
-| `docs/papers/` | Original model paper, supplement and deployment paper |
-| `docs/figures/` | Overview diagram, synthetic illustration and publication figures |
-| `docs/talks/` | Historical Cambridge summer-school lecture |
+| `CLLTIM_MobileVer2.py` | CLL-TIM scoring script for one or more patients |
+| `CLLTIMData/` | Trained learners, feature definitions, fitted transformations and date lookup |
+| `PatientFiles/SynthPat_Multi.csv` | Nine synthetic patient records |
+| `PatientFileFormat.xlsx` | Input variable definitions and encodings |
+| `CLLTIMOutput/` | Generated patient reports and CSV results |
+| `examples/verify_install.py` | Run the synthetic patients and compare results with the reference outputs |
+| `examples/clltim_showcase.py` | Generate the synthetic learner-prediction illustration |
+| `scripts/extend_date_lookup.py` | Extend the date lookup using its existing formats and numeric-code sequence |
+| `docs/synthetic_patient_examples/` | Synthetic patient reports and reference results |
+| `docs/papers/` | Our model and deployment publications, including the 2020 supplement |
+| `docs/figures/` | CLL-TIM overview, publication figures and synthetic illustration |
+| `docs/talks/` | Cambridge summer-school lecture |
 
-The scoring applications and serialized model assets are preserved. The v2 header postdates the 2024 deployment paper; exact identity with the hospital's deployed release has not been established. The EHR integration described in that paper also required institution-specific mapping, automation and monitoring, which are not supplied by running the CSV application.
+The repository supports inference with the trained CLL-TIM ensemble. Clinical study data and a complete executable training workflow are not included. Our [deployment methods](EVIDENCE.md#ehr-deployment-and-validation--2024) describe the additional data harmonization, EHR integration and monitoring used in clinical research.
 
-This is an inference/example repository, not a complete reproduction of training or the clinical studies. Real-patient study data are not included. Source/weight licensing has not been inferred from the papers' figure licenses.
+## Model assets and runtime
 
-## Scope cleanup
+`CLLTIMData/CLL-TIM_BLN_*.sav` contains the 28 fitted learners. Feature-index arrays specify the inputs to each learner; the pickle files hold fitted imputers, scalers and SHAP background summaries. Use the versions in [environment-pipxgboost.yml](../environment-pipxgboost.yml) to load these serialized objects.
 
-The project owner confirmed that the previously included `pipeline_scripts/` files came from COVIMUN work and that `Patient01.mp4` / `Patient02.mp4` were EEG material. Both unrelated groups have been removed from the current repository tree. They were not part of the CLL-TIM scoring path. Their removal does not rewrite Git history or alter originals held outside this repository.
+CLL-TIM constructs 228 features from the patient CSV. Non-XGBoost learners use the stored imputation values and fitted scalers. XGBoost handles missing values internally. Learner probabilities are averaged and rounded to two decimals for reporting. [Model methods](METHODS.md).
 
-## Feature explanations
+## Date lookup
 
-The mobile application's score uses probability column 1. Its forest and linear SHAP branches select class index 0, while its XGBoost branch uses default margin-scale explanations. The application then sums these values into a common feature ranking. Class direction and output units therefore need independent validation before the signed aggregate can be interpreted as an explanation of the final probability.
+`CLLTIMData/Date2Int.csv` covers **1 January 1980 through 31 December 2040**, inclusive. Its columns are:
 
-A diagnostic on synthetic patient `SynthPat01`, using the pinned libraries, found:
+| Column | Format |
+|---|---|
+| `F1` | Calendar date, `YYYY-MM-DD` |
+| `F2` | Existing numeric-code sequence: increasing initially, then capped at its historical maximum |
+| `F3` | Calendar date, `DD-MM-YY` |
 
-| Example learner | Class-1 probability used for scoring | Selected explanation output |
-|---|---|---|
-| XGBoost BL0 | 0.589890 | Margin 0.363510; sigmoid gives 0.589890 |
-| Random Forest BL1 | 0.620705 | Class-0 probability 0.379295 |
-| Logistic Regression BL16 | 0.505580 | Class-0 probability 0.494420 |
+CLL-TIM uses the row position of a matching `F1` date for date calculations. Existing rows must retain their order and values. To extend coverage, run:
 
-These are implementation findings on the supplied mobile application. They do not establish that the original publications used the same explanation code. Matching the legacy reference reports verifies reproduction of that implementation; it does not independently validate the explanations.
+```sh
+python scripts/extend_date_lookup.py --through 2040-12-31
+```
 
-The auxiliary showcase generator now illustrates learner outputs only. Its earlier SHAP and random-missingness demonstrations were removed because they did not provide a validated probability explanation or clinical robustness assessment. A future explanation correction should be versioned separately and checked against learner classes, output units and the ensemble aggregation.
+The script validates all existing rows, infers the numeric-code pattern, and appends consecutive dates with the same date formats and line endings. Running it again for an already covered date leaves the file unchanged.
 
-## Synthetic verification
+## Personalized risk factors
 
-On 14 November 2026, a clean run on Windows with the existing pinned environment generated all 56 expected outputs. The nine text reports and two aggregate CSVs were byte-identical to the supplied references. The updated verifier was then exercised end to end: all nine patients completed and all 11 reference comparisons passed. Seven regression tests also passed, including missing references, changed contents, application failure and stale outputs. Neither the fitted models nor reference outputs were regenerated for this update.
+We use SHAP to derive personalized risk factors, as described in our [model methods](METHODS.md#personalized-risk-factors). The scoring script selects class-0 SHAP values for forest and linear learners and margin-scale SHAP values for XGBoost, while risk predictions use class-1 probabilities. These different output conventions affect the direction and scale of aggregated signed contributions. The aggregate should therefore not be interpreted as an additive decomposition of the final probability. The risk-prediction and SHAP calculations follow separate code paths.
 
-The verifier now:
+## Installation verification
 
-1. Checks that its input and comparison references exist and are nonempty.
-2. Copies the runtime assets into a temporary working directory with empty outputs.
-3. Runs the unmodified application and requires every expected file.
-4. Compares text and semicolon-delimited CSV contents, failing on missing or differing references.
-5. Copies verified outputs to `CLLTIMOutput/` after all comparisons pass.
+```sh
+python examples/verify_install.py
+```
 
-CSV numeric comparisons use absolute tolerance `1e-6`; image/PDF checks require nonempty output files, without asserting binary identity. A failed check does not publish that run's outputs. Other pre-existing files in `CLLTIMOutput/` are left in place.
+The verifier runs CLL-TIM on the bundled synthetic patients in a temporary directory with empty outputs. It requires all expected files and matching reference text/CSV results before copying reports to `CLLTIMOutput/`. Missing references or content differences fail the check.
 
-This demonstrates synthetic inference reproduction in the tested environment. A fresh Conda installation, other operating systems, retraining, real-patient validation and equivalence with a clinical deployment are outside that check.
+CSV numeric comparisons use absolute tolerance `1e-6`. PDF and PNG files must be nonempty. Reference comparison checks reproducibility of the scoring script; clinical performance is assessed in the [validation cohorts](EVIDENCE.md).
 
-To check the verification helper's failure handling without running the model:
+Developer tests for date-lookup compatibility and verification behavior:
 
 ```sh
 python -m unittest discover -s tests -v
 ```
-
-## Research context
-
-The deployment paper reports that EHR predictions were labeled research-use only. See [evidence](EVIDENCE.md) for cohort-specific results and the distinction between prediction validation, trial selection and treatment benefit.

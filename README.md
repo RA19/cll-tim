@@ -1,50 +1,53 @@
 # CLL-TIM
 
-### Using patient history to assess the risk of infection or CLL treatment
+### Predicting infection and treatment risk in newly diagnosed chronic lymphocytic leukaemia
 
-CLL-TIM—the **Chronic Lymphocytic Leukaemia Treatment–Infection Model**—is a machine-learning model for people newly diagnosed with CLL, a blood cancer. It addresses a practical question: **who may develop an infection or need CLL treatment within the next two years?**
+We developed the **CLL Treatment–Infection Model (CLL-TIM)** to identify newly diagnosed patients with chronic lymphocytic leukaemia (CLL) at high risk of **infection and/or initiation of CLL treatment within two years**. CLL-TIM addresses an unmet clinical need during watchful waiting: identifying patients at increased risk of infection or early treatment, including those who do not yet meet iwCLL treatment criteria.
 
-It combines clinical markers, blood-test histories and infection indicators to return a risk score, a confidence category and patient-specific contributing factors. CLL-TIM has been evaluated in Denmark and Germany, used for patient selection in an international clinical trial, and deployed alongside an Epic-based Danish electronic health record.
+CLL-TIM integrates baseline prognostic markers with longitudinal laboratory results and infection histories extending up to seven years. An ensemble of 28 machine-learning algorithms combines these data to provide three patient-specific outputs: **predicted risk of infection and/or CLL treatment, predictive confidence, and personalized risk factors** explaining the patient's prediction.
 
-[Overview](#why-cll-tim) · [Evidence](#where-it-has-been-evaluated-and-used) · [Try it](#try-the-synthetic-example) · [Input guide](docs/USAGE.md) · [Technical details](docs/METHODS.md)
+We developed and internally validated CLL-TIM in Denmark, externally validated it in the German CLL7 cohort, and prospectively validated it through **PreVent-ACaLL across Denmark, Sweden and the Netherlands**. We also integrated CLL-TIM into an Epic-based Danish electronic health record (EHR). Independent investigators subsequently reported validation in a US cohort. The [validation guide](docs/EVIDENCE.md) describes the cohorts, clinical endpoints and results.
 
-![CLL-TIM workflow: patient history enters an ensemble of 28 models, producing a two-year risk score, a confidence category and reported contributing factors. This is an illustrative diagram, not a performance chart.](docs/figures/overview.svg)
+[Clinical purpose](#why-we-developed-cll-tim) · [Validation and use](#where-we-validated-and-used-cll-tim) · [Run CLL-TIM](#run-cll-tim) · [Patient data](docs/USAGE.md#patient-file-format) · [Methods](docs/METHODS.md)
 
-## Why CLL-TIM?
+![CLL-TIM combines clinical markers, laboratory results and infection histories to predict the two-year risk of infection and/or CLL treatment, with predictive confidence and personalized risk factors.](docs/figures/overview.svg)
 
-Infections are an important cause of illness and death in CLL. CLL-TIM was developed to identify increased risk early, including in people who do not yet need treatment under standard clinical criteria. Its use for trial selection lets researchers investigate whether pre-emptive treatment can improve outcomes.
+## Why we developed CLL-TIM
 
-The model uses patterns across a patient's history, including repeated blood tests and prior infection indicators. Its 28 component models combine different views of those data. It can process incomplete records, although the information available still affects its predictions.
+Patients with CLL can experience serious infections before they require treatment. Identifying these patients at diagnosis is important for studying strategies to prevent infection and improve outcomes. We therefore modeled infection and CLL treatment together, capturing both the infectious burden associated with CLL-related immune dysfunction and the risk of subsequent treatment.
 
-## What it returns
+We designed CLL-TIM to work with the heterogeneous, incomplete longitudinal records encountered in clinical practice. Alongside each prediction, predictive confidence and personalized risk factors help physicians assess its reliability and understand which aspects of the patient's history drive the predicted risk.
 
-| Output | What it tells you |
+## What CLL-TIM provides for each patient
+
+| Output | Clinical interpretation |
 |---|---|
-| **Risk score** | A score for infection and/or CLL treatment within two years of the prediction point. |
-| **Confidence category** | High or low confidence, derived from thresholds on the combined score. |
-| **Contributing factors** | Features the application reports as contributing towards higher or lower risk for that patient. |
+| **Two-year risk of infection and/or CLL treatment** | The predicted risk of the composite outcome within two years of the prediction point, with classification as high or low risk. |
+| **Predictive confidence** | How certain CLL-TIM is about that patient's prediction. High-confidence predictions identify patients for whom CLL-TIM has greater certainty; low-confidence predictions indicate greater uncertainty. |
+| **Personalized risk factors** | The factors driving the individual prediction towards higher or lower risk, derived using SHAP. These can differ between patients with similar predicted risk. |
 
-The outcome combines infection and CLL treatment; the application does not return two separate clinical probabilities. In the original study, **having a blood culture drawn** was the infection indicator, regardless of the result. The development prediction point was three months after diagnosis, with the two-year outcome window beginning at that point. See [outcome definitions and study populations](docs/EVIDENCE.md).
+In our original development and validation, we used **a blood-culture draw as a proxy for infection**, irrespective of the culture result. The development prediction point was three months after CLL diagnosis, and outcomes were assessed over the following two years. The prospective PreVent-ACaLL analysis uses CTCAE grade ≥3 infection. See [endpoint definitions](docs/EVIDENCE.md#clinical-endpoint-and-prediction-point) and [how to interpret a report](docs/USAGE.md#interpreting-the-patient-report).
 
-## Where it has been evaluated and used
+## Where we validated and used CLL-TIM
 
-| Stage | Setting | Evidence |
+| Study | Clinical setting | Main findings and use |
 |---|---|---|
-| **Development and validation · 2020** | Denmark; external German CLL7 cohort | Retrospective development and held-out evaluation, followed by external validation. [Nature Communications](https://doi.org/10.1038/s41467-019-14225-8) |
-| **EHR deployment · 2024** | Rigshospitalet and Roskilde, Denmark | Automated predictions adjoining an Epic-based EHR, with retrospective evaluation on a later patient cohort. [npj Digital Medicine](https://doi.org/10.1038/s41746-024-01132-6) |
-| **Trial application** | International PreVent-ACaLL trial | Selection of high-risk/high-confidence participants for a trial of pre-emptive treatment. [NCT03868722](https://clinicaltrials.gov/study/NCT03868722) |
-| **Prospective follow-up · 2026** | Nine international trial sites | Non-randomized follow-up reported at EHA. **Conference abstract.** [Study details](docs/EVIDENCE.md#prospective-follow-up--eha-2026) |
-| **US external evaluation · 2026** | Rochester Epidemiology Project, 454 patients | External validation reported at AACR. **Conference abstract.** [Study details](docs/EVIDENCE.md#us-external-evaluation--aacr-2026) |
+| **Development and external validation · 2020** | Denmark and Germany | We developed CLL-TIM using Danish patient records and validated it in an internal Danish test cohort and the external German CLL7 cohort. In the high-confidence internal benchmark, precision was 72% and recall 75%. [Nature Communications](https://doi.org/10.1038/s41467-019-14225-8) |
+| **EHR deployment and validation · 2024** | Rigshospitalet and Roskilde, Denmark | We automated CLL-TIM predictions within an Epic-based EHR and evaluated performance in a later cohort, including patients with substantial missing data. [npj Digital Medicine](https://doi.org/10.1038/s41746-024-01132-6) |
+| **PreVent-ACaLL: prospective validation and patient selection · 2026** | Denmark, Sweden and the Netherlands | We used CLL-TIM to select high-risk/high-confidence patients for pre-emptive treatment randomization and prospectively evaluated predictions in the non-randomized cohort. EHA 2026, S143 (**conference abstract**). [Results](docs/EVIDENCE.md#prevent-acall-prospective-validation-in-denmark-sweden-and-the-netherlands) · [NCT03868722](https://clinicaltrials.gov/study/NCT03868722) |
+| **Independent US validation · 2026** | Rochester Epidemiology Project, USA | Independent investigators evaluated 454 patients; composite ROC-AUC was 0.74. AACR 2026, abstract 4228 (**conference abstract**). [Results](docs/EVIDENCE.md#independent-us-validation--aacr-2026) |
 
-The original study reported **72% precision and 75% recall on a selected high-confidence internal benchmark subset**. These are not overall accuracy estimates. The [evidence guide](docs/EVIDENCE.md) gives cohort sizes, selection rules, comparisons and limitations. Prediction validation and trial selection do not by themselves establish a benefit from early treatment.
+The [full validation results](docs/EVIDENCE.md) include cohort sizes, confidence selection, comparator models and uncertainty. PreVent-ACaLL evaluates whether short-term pre-emptive treatment can improve outcomes in patients selected by CLL-TIM.
 
-## Try the synthetic example
+## View a patient report
 
-**[Open a complete patient report](docs/synthetic_patient_examples/SynthPat01_Report.pdf)** to see the application before installing it. All nine example patients are synthetic; their results illustrate the software rather than clinical performance.
+**[Open a complete CLL-TIM report](docs/synthetic_patient_examples/SynthPat01_Report.pdf)** showing the predicted two-year risk of infection and/or CLL treatment, predictive confidence and personalized risk factors.
 
-[![Original report for synthetic patient SynthPat01, showing the score, confidence label and legacy contributing-factor display.](docs/synthetic_patient_examples/SynthPat01.png)](docs/synthetic_patient_examples/SynthPat01_Report.pdf)
+[![CLL-TIM report for synthetic patient SynthPat01: risk of infection and/or CLL treatment, predictive confidence and personalized high- and low-risk factors.](docs/synthetic_patient_examples/SynthPat01.png)](docs/synthetic_patient_examples/SynthPat01_Report.pdf)
 
-*Original application output. The explanation implementation has [documented class-direction and scale limitations](docs/IMPLEMENTATION.md#feature-explanations).*
+*Synthetic patient example. All nine example patients in this repository are synthetic. See the [technical notes on personalized risk factors](docs/IMPLEMENTATION.md#personalized-risk-factors) for the SHAP output conventions used by the scoring script.*
+
+## Run CLL-TIM
 
 From a terminal with Git and Conda available:
 
@@ -53,35 +56,31 @@ git clone https://github.com/RA19/cll-tim.git
 cd cll-tim
 conda env create -f environment-pipxgboost.yml
 conda activate clltim_calc_env
-python examples/verify_install.py
-```
-
-The verifier runs all nine synthetic patients with fresh outputs and compares their text and CSV results against the bundled references. After a successful check, it copies **56 generated files** into `CLLTIMOutput/`, including the merged patient PDFs and two aggregate CSVs.
-
-To run the application directly:
-
-```sh
 python CLLTIM_MobileVer2.py
 ```
 
-The legacy runtime has been checked on Windows with Python 3.7.9 and the pinned libraries. A fresh installation on every platform has not been established. See [installation, troubleshooting and expected outputs](docs/USAGE.md).
+CLL-TIM reads the nine synthetic patients in `PatientFiles/SynthPat_Multi.csv` and writes their reports to `CLLTIMOutput/`. For an installation check that also compares results with the reference outputs, run:
 
-## Use your own formatted data
+```sh
+python examples/verify_install.py
+```
 
-The standalone v2 application reads a long-format CSV: one row per observation, with the patient identifier repeated across that patient's rows. One file can contain several patients. It processes baseline markers, laboratory results and infection indicators.
+See the [usage guide](docs/USAGE.md) for expected files, environment requirements and troubleshooting.
 
-Use the [input guide](docs/USAGE.md#patient-file-format), [data dictionary](PatientFileFormat.xlsx) and [complete synthetic CSV](PatientFiles/SynthPat_Multi.csv). Put your CSV in `PatientFiles/`, change `PatientFileName` near the top of `CLLTIM_MobileVer2.py`, then run from the repository root.
+## Prepare your patient data
 
-## Explore further
+CLL-TIM reads one CSV containing one or more patients, with one row per observation. The scoring script accepts baseline CLL markers, laboratory results and infection indicators. Follow the [input guide](docs/USAGE.md#patient-file-format), [data dictionary](PatientFileFormat.xlsx) and [complete example CSV](PatientFiles/SynthPat_Multi.csv).
+
+Put your CSV in `PatientFiles/` and set `PatientFileName` near the top of `CLLTIM_MobileVer2.py`. Run CLL-TIM from the repository root. Reports are named using the patient identifier in the CSV.
+
+## Further reading
 
 | Guide | Contents |
 |---|---|
-| [Using CLL-TIM](docs/USAGE.md) | Installation, input format, report interpretation and troubleshooting |
-| [Evidence](docs/EVIDENCE.md) | Validation cohorts, metrics, trial application and published result figures |
-| [Methods](docs/METHODS.md) | Ensemble design, feature engineering, confidence and missing data |
-| [Implementation](docs/IMPLEMENTATION.md) | Repository contents, version provenance, reproducibility and known limitations |
-| [Figure sources](docs/figures/SOURCES.md) | Exact figure identities, captions and attribution |
+| [Using CLL-TIM](docs/USAGE.md) | Installation, patient-file format, report interpretation and troubleshooting |
+| [Validation and clinical use](docs/EVIDENCE.md) | Our retrospective and prospective validation, EHR deployment and independent US validation |
+| [Model and methods](docs/METHODS.md) | Ensemble development, predictive confidence, missing data and personalized risk factors |
+| [Technical reference](docs/IMPLEMENTATION.md) | Repository contents, model files, date lookup and SHAP conventions |
+| [Figure sources](docs/figures/SOURCES.md) | Publication figures and attribution |
 
-This repository contains the standalone/mobile research implementation, trained model assets and synthetic examples. The original EHR deployment labeled predictions **research-use only**. The scoring applications and model files are preserved; this is not a complete training-reproduction package.
-
-**Rudi Agius and collaborators** · Rigshospitalet / Copenhagen University Hospital · Technical University of Denmark. Full publications and author lists are linked in the [evidence guide](docs/EVIDENCE.md#publications).
+**Rudi Agius and collaborators** · Rigshospitalet / Copenhagen University Hospital · Technical University of Denmark. [Publications](docs/EVIDENCE.md#publications).

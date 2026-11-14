@@ -1,8 +1,8 @@
 """Verify a fresh synthetic run, then copy verified reports to CLLTIMOutput/.
 
-Runs the preserved v2 application in an isolated working directory. Missing
+Runs CLL-TIM in an isolated working directory. Missing
 outputs/references and differences in reference text/CSV contents fail the check.
-This checks reproduction of the application, not clinical or SHAP correctness.
+This checks reproduction of CLL-TIM results, not clinical or SHAP correctness.
 Use the pinned runtime: python examples/verify_install.py
 """
 
@@ -49,7 +49,7 @@ def missing_files(directory, files):
     )]
 
 
-def run_app(workspace):
+def run_clltim(workspace):
     env = dict(os.environ, PYTHONWARNINGS="ignore", MPLBACKEND="Agg")
     return subprocess.run(
         [sys.executable, "CLLTIM_MobileVer2.py"],
@@ -58,7 +58,7 @@ def run_app(workspace):
 
 
 def _rows(path):
-    # Both application aggregate CSVs are semicolon-delimited.
+    # Both CLL-TIM aggregate CSVs are semicolon-delimited.
     with open(path, newline="", encoding="utf-8-sig") as handle:
         return list(csv.reader(handle, delimiter=";"))
 
@@ -136,15 +136,15 @@ def main():
         fresh_output = os.path.join(workspace, "CLLTIMOutput")
         os.mkdir(fresh_output)
 
-        print("[2/3] Running v2 with empty outputs (a few minutes) ...", flush=True)
+        print("[2/3] Running CLL-TIM with empty outputs (a few minutes) ...", flush=True)
         try:
-            proc = run_app(workspace)
+            proc = run_clltim(workspace)
         except subprocess.TimeoutExpired:
-            sys.exit("FAIL: application exceeded the 30-minute verification timeout.")
+            sys.exit("FAIL: CLL-TIM exceeded the 30-minute verification timeout.")
         if proc.returncode != 0:
             print(proc.stdout[-4000:])
             print(proc.stderr[-4000:])
-            sys.exit("FAIL: application exited with non-zero status; see docs/USAGE.md.")
+            sys.exit("FAIL: CLL-TIM exited with non-zero status; see docs/USAGE.md.")
 
         print("[3/3] Checking fresh outputs and reference contents ...", flush=True)
         missing = missing_files(fresh_output, expected_files(names))
