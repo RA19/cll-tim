@@ -3,3 +3,7 @@ CLLTIMOutput/*
 !CLLTIMOutput/.gitkeep
 __pycache__/
 *.pyc
+fig_pipeline.png
+fig_ensemble_anatomy.png
+fig_shap_summary.png
+fig_missingness.png
