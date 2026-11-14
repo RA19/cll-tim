@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="530" viewBox="0 0 1280 530" role="img" aria-labelledby="title desc">
+  <title id="title">CLL-TIM: patient history, combined perspectives, clearer risk assessment</title>
+  <desc id="desc">An illustrative three-step overview. Baseline markers, blood tests and infection history enter an ensemble of 28 models. The application returns a two-year risk score, a confidence category and reported contributing factors. This diagram shows the workflow, not clinical performance.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#8aa4ae"/></marker>
+  </defs>
+  <rect width="1280" height="530" rx="22" fill="#f1f6f8"/>
+  <rect x="32" y="30" width="8" height="65" rx="4" fill="#147d85"/>
+  <g font-family="Segoe UI,Arial,sans-serif">
+    <text x="58" y="58" font-size="18" font-weight="700" letter-spacing="2" fill="#147d85">CLL-TIM</text>
+    <text x="58" y="96" font-size="32" font-weight="700" fill="#142e46">A fuller history. A clearer view of risk.</text>
+    <text x="58" y="135" font-size="19" fill="#4e6575">Who may develop an infection or need CLL treatment within the next two years?</text>
+    <rect x="42" y="174" width="363" height="278" rx="16" fill="#fff" stroke="#d7e3e8"/>
+    <rect x="459" y="174" width="363" height="278" rx="16" fill="#142e46"/>
+    <rect x="876" y="174" width="363" height="278" rx="16" fill="#fff" stroke="#d7e3e8"/>
+    <path d="M416 313H446" stroke="#8aa4ae" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M833 313H863" stroke="#8aa4ae" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="69" y="214" font-size="12" letter-spacing="2" fill="#147d85" font-weight="700">01 / PATIENT HISTORY</text>
+    <text x="69" y="257" font-size="24" fill="#142e46" font-weight="700">Bring the record together</text>
+    <g font-size="18" fill="#4e6575">
+      <circle cx="77" cy="303" r="5" fill="#147d85"/><text x="95" y="309">Baseline CLL markers</text>
+      <circle cx="77" cy="345" r="5" fill="#147d85"/><text x="95" y="351">Blood-test history</text>
+      <circle cx="77" cy="387" r="5" fill="#147d85"/><text x="95" y="393">Infection indicators</text>
+    </g>
+    <text x="486" y="214" font-size="12" letter-spacing="2" fill="#8cd0cf" font-weight="700">02 / COMBINED PERSPECTIVES</text>
+    <text x="486" y="286" font-size="64" fill="#fff" font-weight="700">28</text>
+    <text x="585" y="285" font-size="23" fill="#fff">models</text>
+    <text x="486" y="329" font-size="18" fill="#c8d9e5">Different views of the same history,</text>
+    <text x="486" y="356" font-size="18" fill="#c8d9e5">combined into one score.</text>
+    <rect x="486" y="388" width="204" height="31" rx="15" fill="#26485f"/>
+    <text x="501" y="409" font-size="13" fill="#d3e9ef">Up to seven years of history</text>
+    <text x="903" y="214" font-size="12" letter-spacing="2" fill="#147d85" font-weight="700">03 / APPLICATION OUTPUT</text>
+    <text x="903" y="257" font-size="24" fill="#142e46" font-weight="700">Read the result in context</text>
+    <g font-size="18" fill="#4e6575">
+      <rect x="903" y="292" width="6" height="21" rx="3" fill="#147d85"/><text x="924" y="309">Two-year risk score</text>
+      <rect x="903" y="334" width="6" height="21" rx="3" fill="#d98b52"/><text x="924" y="351">Confidence category</text>
+      <rect x="903" y="376" width="6" height="21" rx="3" fill="#8395b1"/><text x="924" y="393">Reported contributing factors</text>
+    </g>
+    <text x="43" y="493" font-size="14" fill="#627889">Illustrative workflow · Composite outcome: infection and/or CLL treatment · Research implementation</text>
+  </g>
+</svg>

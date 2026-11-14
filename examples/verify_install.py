@@ -1,180 +1,172 @@
-"""CLL-TIM install sanity check.
+"""Verify a fresh synthetic run, then copy verified reports to CLLTIMOutput/.
 
-Runs the stand-alone scoring application on the bundled multi-patient file
-(PatientFiles/SynthPat_Multi.csv) and confirms that the expected set of
-output files is produced for every patient in CLLTIMOutput/:
-
-    <Patient>.pdf / .png                 risk + confidence report sheet
-    <Patient>HeatmapsTop.pdf / .png      SHAP attribution heatmaps
-    <Patient>_Report.pdf                 merged patient report
-    <Patient>_RiskFactors.txt            top personalised risk factors
-    SynthPat_Multi_Outputs_FeatureVectors.csv
-    SynthPat_Multi_Outputs_RiskFactors.csv
-
-A successful check means CLL-TIM is installed correctly and the model pack
-loads end-to-end. Deterministic outputs (risk factors, feature vectors) are
-additionally compared against the reference copies in
-docs/synthetic_patient_examples/.
-
-Usage (from the repository root, inside the clltim environment):
-
-    python examples/verify_install.py
+Runs the preserved v2 application in an isolated working directory. Missing
+outputs/references and differences in reference text/CSV contents fail the check.
+This checks reproduction of the application, not clinical or SHAP correctness.
+Use the pinned runtime: python examples/verify_install.py
 """
 
 import csv
+import math
 import os
+import shutil
 import subprocess
 import sys
+import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PATIENT_FILE = os.path.join(ROOT, "PatientFiles", "SynthPat_Multi.csv")
 OUTPUT_DIR = os.path.join(ROOT, "CLLTIMOutput")
 GOLDEN_DIR = os.path.join(ROOT, "docs", "synthetic_patient_examples")
 
-PER_PATIENT_SUFFIXES = [
-    ".pdf",
-    ".png",
-    "HeatmapsTop.pdf",
-    "HeatmapsTop.png",
-    "_Report.pdf",
-    "_RiskFactors.txt",
-]
-AGGREGATE_FILES = [
+PER_PATIENT_SUFFIXES = (
+    ".pdf", ".png", "HeatmapsTop.pdf", "HeatmapsTop.png",
+    "_Report.pdf", "_RiskFactors.txt",
+)
+AGGREGATE_FILES = (
     "SynthPat_Multi_Outputs_FeatureVectors.csv",
     "SynthPat_Multi_Outputs_RiskFactors.csv",
-]
+)
 
 
 def patient_names(path):
-    with open(path, newline="", encoding="utf-8-sig") as fh:
-        return sorted({row["Patient"] for row in csv.DictReader(fh)})
+    with open(path, newline="", encoding="utf-8-sig") as handle:
+        return sorted({row["Patient"] for row in csv.DictReader(handle)})
 
 
-def run_app():
-    env = dict(os.environ, PYTHONWARNINGS="ignore")
-    proc = subprocess.run(
+def expected_files(names):
+    return [p + suffix for p in names for suffix in PER_PATIENT_SUFFIXES] + list(AGGREGATE_FILES)
+
+
+def reference_files(names):
+    return [p + "_RiskFactors.txt" for p in names] + list(AGGREGATE_FILES)
+
+
+def missing_files(directory, files):
+    return [name for name in files if not (
+        os.path.isfile(os.path.join(directory, name))
+        and os.path.getsize(os.path.join(directory, name)) > 0
+    )]
+
+
+def run_app(workspace):
+    env = dict(os.environ, PYTHONWARNINGS="ignore", MPLBACKEND="Agg")
+    return subprocess.run(
         [sys.executable, "CLLTIM_MobileVer2.py"],
-        cwd=ROOT, env=env, capture_output=True, text=True, timeout=1800,
+        cwd=workspace, env=env, capture_output=True, text=True, timeout=1800,
     )
-    return proc
-
-
-def check_file_set(names):
-    missing = []
-    for p in names:
-        for suf in PER_PATIENT_SUFFIXES:
-            f = os.path.join(OUTPUT_DIR, p + suf)
-            if not (os.path.isfile(f) and os.path.getsize(f) > 0):
-                missing.append(p + suf)
-    for f in AGGREGATE_FILES:
-        p = os.path.join(OUTPUT_DIR, f)
-        if not (os.path.isfile(p) and os.path.getsize(p) > 0):
-            missing.append(f)
-    return missing
 
 
 def _rows(path):
-    with open(path, newline="", encoding="utf-8-sig") as fh:
-        return list(csv.reader(fh))
+    # Both application aggregate CSVs are semicolon-delimited.
+    with open(path, newline="", encoding="utf-8-sig") as handle:
+        return list(csv.reader(handle, delimiter=";"))
 
 
 def _cell_eq(a, b, tol=1e-6):
+    a, b = a.strip(), b.strip()
     if a == b:
         return True
     try:
-        return abs(float(a) - float(b)) <= tol
+        left, right = float(a), float(b)
     except ValueError:
         return False
+    return (math.isnan(left) and math.isnan(right)) or math.isclose(
+        left, right, rel_tol=0, abs_tol=tol,
+    )
 
 
 def compare_table(new_path, ref_path, tol=1e-6):
-    """Numeric-tolerant table comparison; returns (match, detail)."""
     try:
         new, ref = _rows(new_path), _rows(ref_path)
     except OSError as exc:
-        return None, str(exc)
+        return False, str(exc)
     if len(new) != len(ref):
-        return False, f"row count {len(new)} vs reference {len(ref)}"
+        return False, "row count %d vs reference %d" % (len(new), len(ref))
     for i, (rn, rr) in enumerate(zip(new, ref)):
         if len(rn) != len(rr):
-            return False, f"row {i}: {len(rn)} cols vs {len(rr)}"
+            return False, "row %d: %d columns vs reference %d" % (i, len(rn), len(rr))
         for j, (cn, cr) in enumerate(zip(rn, rr)):
-            if not _cell_eq(cn.strip(), cr.strip(), tol):
-                return False, f"row {i} col {j}: {cn!r} vs {cr!r}"
-    return True, "identical"
+            if not _cell_eq(cn, cr, tol):
+                return False, "row %d column %d: %r vs %r" % (i, j, cn, cr)
+    return True, "match"
 
 
-def compare_to_golden(names):
+def compare_to_golden(names, output_dir):
     checks = []
-    for p in names:
-        checks.append((p + "_RiskFactors.txt", _compare_txt(p + "_RiskFactors.txt")))
-    for f in AGGREGATE_FILES:
-        checks.append((f, compare_table(os.path.join(OUTPUT_DIR, f),
-                                        os.path.join(GOLDEN_DIR, f))))
+    for name in reference_files(names):
+        new_path = os.path.join(output_dir, name)
+        ref_path = os.path.join(GOLDEN_DIR, name)
+        if name.endswith(".csv"):
+            result = compare_table(new_path, ref_path)
+        else:
+            try:
+                with open(new_path, encoding="utf-8") as handle:
+                    new = handle.read().split()
+                with open(ref_path, encoding="utf-8") as handle:
+                    ref = handle.read().split()
+                result = (new == ref, "match" if new == ref else "content differs")
+            except (OSError, UnicodeError) as exc:
+                result = (False, str(exc))
+        checks.append((name, result))
     return checks
-
-
-def _compare_txt(fname):
-    new_p = os.path.join(OUTPUT_DIR, fname)
-    ref_p = os.path.join(GOLDEN_DIR, fname)
-    try:
-        with open(new_p, encoding="utf-8", errors="replace") as fh:
-            new = fh.read().split()
-        with open(ref_p, encoding="utf-8", errors="replace") as fh:
-            ref = fh.read().split()
-    except OSError as exc:
-        return None, str(exc)
-    return (new == ref), "identical" if new == ref else "content differs"
 
 
 def main():
     if not os.path.isfile(PATIENT_FILE):
-        sys.exit(f"ERROR: patient file not found: {PATIENT_FILE}")
-
+        sys.exit("FAIL: patient file not found: " + PATIENT_FILE)
     names = patient_names(PATIENT_FILE)
-    print(f"[1/3] {len(names)} patients in SynthPat_Multi.csv: "
-          f"{', '.join(names)}")
+    if not names:
+        sys.exit("FAIL: no synthetic patients found.")
+    unavailable = missing_files(GOLDEN_DIR, reference_files(names))
+    if unavailable:
+        sys.exit("FAIL: missing or empty reference files: " + ", ".join(unavailable))
 
-    print("[2/3] Running CLLTIM_MobileVer2.py (a few minutes) ...")
-    proc = run_app()
-    if proc.returncode != 0:
-        print(proc.stdout[-4000:])
-        print(proc.stderr[-4000:])
-        sys.exit("FAIL: application exited with a non-zero status "
-                 "(see output above; check the environment install notes "
-                 "in the README).")
+    print("[1/3] %d patients in SynthPat_Multi.csv" % len(names), flush=True)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    output_root = os.path.realpath(OUTPUT_DIR)
+    with tempfile.TemporaryDirectory(prefix=".verify-", dir=output_root) as workspace:
+        # Cleanup is confined to a newly created directory inside CLLTIMOutput.
+        if os.path.commonpath([output_root, os.path.realpath(workspace)]) != output_root:
+            sys.exit("FAIL: verification directory is outside the output folder.")
+        shutil.copy2(os.path.join(ROOT, "CLLTIM_MobileVer2.py"), workspace)
+        shutil.copytree(os.path.join(ROOT, "CLLTIMData"), os.path.join(workspace, "CLLTIMData"))
+        os.mkdir(os.path.join(workspace, "PatientFiles"))
+        shutil.copy2(PATIENT_FILE, os.path.join(workspace, "PatientFiles", "SynthPat_Multi.csv"))
+        fresh_output = os.path.join(workspace, "CLLTIMOutput")
+        os.mkdir(fresh_output)
 
-    print("[3/3] Checking CLLTIMOutput/ against the expected file set ...")
-    missing = check_file_set(names)
-    if missing:
-        for f in missing:
-            print(f"  MISSING  {f}")
-        sys.exit(f"FAIL: {len(missing)} expected output file(s) not produced.")
+        print("[2/3] Running v2 with empty outputs (a few minutes) ...", flush=True)
+        try:
+            proc = run_app(workspace)
+        except subprocess.TimeoutExpired:
+            sys.exit("FAIL: application exceeded the 30-minute verification timeout.")
+        if proc.returncode != 0:
+            print(proc.stdout[-4000:])
+            print(proc.stderr[-4000:])
+            sys.exit("FAIL: application exited with non-zero status; see docs/USAGE.md.")
 
-    print(f"  file set complete: {len(names)} patients x "
-          f"{len(PER_PATIENT_SUFFIXES)} files + {len(AGGREGATE_FILES)} "
-          "aggregate CSVs")
+        print("[3/3] Checking fresh outputs and reference contents ...", flush=True)
+        missing = missing_files(fresh_output, expected_files(names))
+        if missing:
+            sys.exit("FAIL: expected outputs not produced: " + ", ".join(missing))
+        failed = []
+        for name, (match, detail) in compare_to_golden(names, fresh_output):
+            print("  %s  %s%s" % (
+                "MATCH" if match else "FAIL", name,
+                "" if match else " (" + detail + ")",
+            ))
+            if not match:
+                failed.append(name)
+        if failed:
+            sys.exit("FAIL: %d reference comparison(s) differ; no outputs copied." % len(failed))
 
-    drift = 0
-    for name, res in compare_to_golden(names):
-        status = "reference unavailable"
-        if isinstance(res, tuple):
-            match, detail = res
-            status = "MATCH" if match else ("?" if match is None else "DIFF")
-            if match is False:
-                drift += 1
-            if detail != "identical":
-                status += f" ({detail})"
-        print(f"  {status:>7}  {name}")
+        for name in expected_files(names):
+            shutil.copy2(os.path.join(fresh_output, name), os.path.join(output_root, name))
 
-    print()
-    if drift:
-        print(f"PASS (with {drift} content difference(s) vs the reference "
-              "set - usually benign library-version drift in numeric "
-              "formatting; file set is complete).")
-    else:
-        print("PASS: CLL-TIM produced the complete expected file set and "
-              "deterministic outputs match the reference set.")
+    print("PASS: %d fresh outputs; %d reference comparisons match. Reports: %s" % (
+        len(expected_files(names)), len(reference_files(names)), OUTPUT_DIR,
+    ))
 
 
 if __name__ == "__main__":
